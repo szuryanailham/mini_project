@@ -17,7 +17,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/add-post', function () {
+    return view('AddNewPost');
+});
+Route::get('/search', function () {
+    return view('Search');
+});
 
+Route::get('/notif', function () {
+    return view('Notifikasi');
+});
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -29,3 +38,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/proto.php';
