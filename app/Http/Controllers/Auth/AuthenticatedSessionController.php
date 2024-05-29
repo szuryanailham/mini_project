@@ -25,11 +25,17 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
-
-        $request->session()->regenerate();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $credentials = $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+        if (Auth::attempt($credentials)) {
+            // apabila Session berhasil maka simpan dan hubungkan
+            $request->session()->regenerate();
+            return redirect()->intended('/home');
+        }
+            // APABILA AUTHENTICATION ......
+            return back()->with('loginError','Login failed !');
     }
 
     /**

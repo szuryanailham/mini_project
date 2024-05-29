@@ -15,30 +15,43 @@
       </div>
     </nav>
     <div class="flex flex-row">
-      <form class="overscroll-contain h-fit w-1/2 max-h-screen overflow-y-auto p-7">
-    {{-- ======================= CONTAIN =================================== --}}
-        {{-- judul postingan --}}
+      <form method="POST" action="/posts" class="overscroll-contain h-fit w-1/2 max-h-screen overflow-y-auto p-7" enctype="multipart/form-data">
+        @csrf
+        {{-- ======================= CONTAIN =================================== --}}
+        {{-- Judul Postingan --}}
         <div class="mb-5">
-            <label for="first_name" class="block mb-2 text-sm font-medium text-white ">Judul post</label>
-            <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="judul post ...." required />
+            <label for="judul" class="block mb-2 text-sm font-medium text-white">Judul post</label>
+            <input type="text" id="judul" name="judul" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Judul post ...." required />
         </div>
-        {{-- APLOUD IMAGE --}}
-        <label for="first_name" class="block mb-2 text-sm font-medium text-white p-2 ">aploud</label>
-        <div class="flex items-center justify-center w-full">
-            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-grey-400">
-                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                    </svg>
-                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                </div>
-                <input id="dropzone-file" type="file" class="hidden" />
-            </label>
+
+        {{-- deskripsi --}}
+        <div class="mb-5">
+          <label for="deskripsi" class="block mb-2 text-sm font-medium text-white">deskripsi</label>
+          <input type="text" id="deskripsi" name="deskripsi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="deskripsi post ...." required />
+      </div>
+    
+        {{-- Upload Gambar --}}
+        <div class="mb-5">
+            <label for="dropzone-file" class="block mb-2 text-sm font-medium text-white">Upload</label>
+            <div class="flex items-center justify-center w-full">
+                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                    </div>
+                    <input name="image" id="dropzone-file" type="file" class="hidden" />
+                </label>
+            </div>
         </div>
-        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-5">Submit</button>
-        {{-- AND APLOUD IMAGE --}}
-      </form>
+    
+        {{-- Submit Button --}}
+        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-5">Submit</button>
+    </form>
+    
+
       {{-- ======================= END CONTAIN =================================== --}}
       <div class="w-[40%] p-10">
         <div class="mb-5">

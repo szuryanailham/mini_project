@@ -17,7 +17,8 @@
     <div class="flex flex-row">
       <div class="overscroll-contain h-fit w-1/2 max-h-screen overflow-y-auto p-7">
     {{-- ======================= CONTAIN =================================== --}}
-    <form class="flex items-center max-w-sm mx-auto">   
+    <form class="flex items-center max-w-sm mx-auto" method="POST" action="/search-btn">   
+      @csrf
         <label for="simple-search" class="sr-only">Search</label>
         <div class="relative w-full">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -25,32 +26,23 @@
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2"/>
                 </svg>
             </div>
-            <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search branch name..." required />
+            <input name="search" type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search branch name..." required />
         </div>
         <button type="submit" class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-            </svg>
-            <span class="sr-only">Search</span>
+            search
         </button>
     </form>
         {{-- ======================== RESULT SEARCH ============================= --}}
+        @foreach ($results as $item)
         <div class="w-full border flex justify-between border-white h-fit p-2 mb-5">
-            {{-- image --}}
-           <div class="flex flec-col gap-4 item-center">
-            <img class="w-10 h-10 rounded-full" src="https://github.com/shadcn.png" alt="Profile">
-            <p class="mt-2">Ilham Suryana</p>
-           </div>
-           <p class="p-2 font-bold text-red-600">Follow</p>
-        </div>
-        <div class="w-full border flex justify-between border-white h-fit p-2 mb-5">
-            {{-- image --}}
-           <div class="flex flec-col gap-4 item-center">
-            <img class="w-10 h-10 rounded-full" src="https://github.com/shadcn.png" alt="Profile">
-            <p class="mt-2">Ilham Suryana</p>
-           </div>
-           <p class="p-2 font-bold text-red-600">Follow</p>
-        </div>
+         <div class="flex flec-col gap-4 item-center">
+          <img class="w-10 h-10 rounded-full" src="https://github.com/shadcn.png" alt="Profile">
+          <p class="mt-2">{{ $item->name }}</p>
+         </div>
+         <p class="p-2 font-bold text-red-600">Follow</p>
+      </div>
+        @endforeach
+       
       </div>
       
       {{-- ======================= END CONTAIN =================================== --}}

@@ -5,10 +5,12 @@ use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\PostEditController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -36,6 +38,30 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    
+    Route::get('/home', [PostEditController::class, 'index']);
+
+    
+    Route::resource('/posts', PostEditController::class);
+
+    Route::post('/search-btn', [PostEditController::class, 'search']);
+
+    Route::get('/notif', function () {
+        return view('Notifikasi');
+    });
+
+    Route::get('/add-post', function () {
+        return view('AddNewPost');
+    });
+    Route::get('/search', function () {
+        return view('Search',[
+            'results' =>  $users = User::take(3)->get()
+        ]);
+    });
+    Route::get('/dashboard', function(){
+        return view('dashboard');
+    })->name('dashboard');
+    
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
@@ -54,6 +80,6 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::get('logout', [AuthenticatedSessionController::class, 'destroy']);
 });
