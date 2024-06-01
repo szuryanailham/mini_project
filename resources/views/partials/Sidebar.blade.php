@@ -1,5 +1,5 @@
-<aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-    <div class="h-full px-3 py-4 overflow-y-auto text-white bg-gray-800">
+<aside id="default-sidebar" class="fixed  top-0 left-0 z-40 w-64 h-screen overflow-y-auto transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+    <div class=" px-3 py-4 overflow-y-auto text-white bg-black h-[800px] ">
        <ul class="space-y-2 font-medium">
          @guest
          <li class="flex flex-row items-center gap-5 mb-5">
@@ -8,10 +8,17 @@
           </li>
          @endguest
          @auth
-         <li class="flex flex-row items-center gap-5 mb-5">
-            <img class="w-10 h-10 rounded-full" src="https://github.com/shadcn.png" alt="Profile">
-            <p class="text-white font-semibold">{{ auth()->user()->name }}</p>
-          </li>
+         <li class="mb-5">
+            <div class="flex flex-row items-center gap-5">
+                <img class="w-10 h-10 rounded-full" src="https://github.com/shadcn.png" alt="Profile">
+                <div class="text-white font-semibold">
+                  {{ auth()->user()->name }}
+                  <p class=" text-xs text-red-600"><a href="/profile">Edit profile</a></p>
+               </div>
+            </div>
+           
+        </li>
+        
          @endauth
        
           {{-- home --}}
@@ -49,7 +56,7 @@
      {{-- bookmartk --}}
      @auth
      <li>
-      <a href="#" class="flex items-center p-2 rounded-lg text-white  group">
+      <a href="/bookmark" class="flex items-center p-2 rounded-lg text-white  group">
         <i class="bi bi-bookmark-fill text-xl text-white"></i>
          <span class="flex-1 ms-3 whitespace-nowrap">Bookmark</span>
       </a>

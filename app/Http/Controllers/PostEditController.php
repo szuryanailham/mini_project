@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Follows;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+
 
 class PostEditController extends Controller
 {
@@ -14,11 +17,18 @@ class PostEditController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::latest()->get();
+        $currentUserId = Auth::id();
+        $followedUserIds = Follows::where('follower_id', $currentUserId)->pluck('followed_id')->toArray();
+        $users = User::whereNotIn('id', $followedUserIds)
+        ->where('id', '!=', $currentUserId)
+        ->take(3)
+        ->get();
 // Anda bisa mengakses pengguna yang menulis post tersebut
 // $user = $post->user;
         return view("home", [
-            'posts' => $posts
+            'posts' => $posts,
+            'recommend' => $users
         ]);
     }
     
@@ -85,14 +95,22 @@ class PostEditController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
-        
+        $currentUserId = Auth::id();
+        $followedUserIds = Follows::where('follower_id', $currentUserId)->pluck('followed_id')->toArray();
         if (empty($search)) {
-            // Jika tidak ada input pencarian, ambil 3 data teratas
-            $users = User::take(2)->get();
+            // Jika tidak ada input pencarian, ambil 3 data teratas dan exclude yang sudah diikuti
+            $users = User::whereNotIn('id', $followedUserIds)
+                        ->where('id', '!=', $currentUserId)
+                        ->take(3)
+                        ->get();
         } else {
-            // Jika ada input pencarian, ambil data berdasarkan pencarian
-            $users = User::where('name', 'like', '%' . $search . '%')->get();
+            // Jika ada input pencarian, ambil data berdasarkan pencarian dan exclude yang sudah diikuti
+            $users = User::where('name', 'like', '%' . $search . '%')
+                        ->whereNotIn('id', $followedUserIds)
+                        ->where('id', '!=', $currentUserId)
+                        ->get();
         }
+        
     
         return view('Search', [
             'results' => $users,

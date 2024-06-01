@@ -10,7 +10,11 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\PostController;
+use App\Models\Bookmark;
+use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -41,10 +45,27 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/home', [PostEditController::class, 'index']);
 
-    
+    Route::get('/followUp/{id}',[PostController::class, 'followUp']);
+
+    Route::post('/add-comment', [PostController::class, 'addComment'])->name('add.comment');
+
+    Route::post('/sub-comment', [PostController::class, 'subComment'])->name('add.comment');
+
+    Route::get('/detail-post/{kode_post}', [PostController::class, 'detail_post']);
+
     Route::resource('/posts', PostEditController::class);
 
     Route::post('/search-btn', [PostEditController::class, 'search']);
+
+    Route::get('/bookmark', function(){
+        $userId = Auth::id();
+        return view('Bookmarks',[
+            'bookmarks' => Bookmark::where('user_id',$userId)->get()
+        ]);
+    });
+
+    Route::get('/post/like/{kode_post}',[PostController::class,'likePost']);
+
 
     Route::get('/notif', function () {
         return view('Notifikasi');
@@ -53,6 +74,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/add-post', function () {
         return view('AddNewPost');
     });
+
+    Route::get('/add-bookmark/{kode_post}', [PostController::class, 'addBookmark'])->name('add-bookmark');
+
     Route::get('/search', function () {
         return view('Search',[
             'results' =>  $users = User::take(3)->get()
