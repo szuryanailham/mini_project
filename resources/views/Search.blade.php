@@ -42,7 +42,6 @@
          <a href="/followUp/{{ $item->id }}">
           <p class="p-2 font-bold text-red-600">Follow</p>
          </a>
-       
       </div>
         @endforeach
        

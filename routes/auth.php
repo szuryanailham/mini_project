@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\PostController;
 use App\Models\Bookmark;
+use App\Models\Follows;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -45,13 +46,16 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/home', [PostEditController::class, 'index']);
 
-    Route::get('/followUp/{id}',[PostController::class, 'followUp']);
+    Route::get('/followUp/{id}', [PostController::class, 'followUp'])->name('followUp.get');
+Route::post('/followUp/{id}', [PostController::class, 'followUp'])->name('followUp.post');
 
     Route::post('/add-comment', [PostController::class, 'addComment'])->name('add.comment');
 
     Route::post('/sub-comment', [PostController::class, 'subComment'])->name('add.comment');
 
     Route::get('/detail-post/{kode_post}', [PostController::class, 'detail_post']);
+
+    Route::post('/upload-profile', [PostController::class, 'aploud_profile']);
 
     Route::resource('/posts', PostEditController::class);
 
@@ -67,19 +71,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/post/like/{kode_post}',[PostController::class,'likePost']);
 
 
-    Route::get('/notif', function () {
-        return view('Notifikasi');
-    });
+    Route::get('/notif',[PostController::class,'notification']);
 
     Route::get('/add-post', function () {
         return view('AddNewPost');
     });
 
+    Route::get('/following',[PostController::class,'following']);
+
     Route::get('/add-bookmark/{kode_post}', [PostController::class, 'addBookmark'])->name('add-bookmark');
 
     Route::get('/search', function () {
+        $currentUserId = Auth::id();
+        $followedUserIds = Follows::where('follower_id', $currentUserId)->pluck('followed_id')->toArray();
+        $users = User::whereNotIn('id', $followedUserIds)
+                     ->where('id', '!=', $currentUserId)
+                     ->take(3)
+                     ->get();
         return view('Search',[
-            'results' =>  $users = User::take(3)->get()
+            'results' =>  $users = User::take(3)->get(),
+            'recommend' => $users
         ]);
     });
     Route::get('/dashboard', function(){

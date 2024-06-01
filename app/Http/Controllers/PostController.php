@@ -19,11 +19,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * 
-     */
-
+ 
      public function __construct()
      {
          $this->middleware('auth');
@@ -51,16 +47,13 @@ class PostController extends Controller
     if ($post->likes()->where('user_id', $user->id)->exists()) {
         $post->likes()->where('user_id', $user->id)->delete();
 
-        // Decrement the likes_count in posts table
         $post->decrement('likes_count');
 
         return redirect()->back()->with('success', 'You unliked the post!');
     }
 
-    // Jika user belum like, tambahkan like
     $post->likes()->create(['user_id' => $user->id]);
 
-    // Increment the likes_count in posts table
     $post->increment('likes_count');
 
     return redirect()->back()->with('success', 'You liked the post!');
@@ -68,12 +61,11 @@ class PostController extends Controller
     }
 
     public function detail_post($kode_post)
-    {
-       // mengambil data post 
+    { 
     $post = Post::where('kode_post',$kode_post)->first();
-    // mengambil comment 
+ 
     $comments = $post->comments()->latest()->get();
-    // mengambil comment
+
     return view('Comment',[
        'post'=>$post,
        'comment' => $comments 
@@ -86,19 +78,18 @@ class PostController extends Controller
             'post_id' => 'required|integer',
         ]);
         
-        // Simpan komentar ke dalam database
+
         $newComment = Comment::create([
             'content' => $request->comment,
             'post_id' => $request->post_id,
             'user_id' => auth()->id(),
         ]);
 
-        // Redirect ke halaman yang sesuai atau tampilkan pesan sukses
         return redirect()->back()->with('success', 'Comment added successfully.');
     }
 
     function subComment(Request $request){
-        // dd($request);
+  
          $request->validate([
             'sub_comment' => 'required|string',
             'comment_id' => 'required|integer',
@@ -115,7 +106,6 @@ class PostController extends Controller
     function followUp($id_user){
         $follower = Auth::user();
 
-        // Check if the user is already following the other user
         $isFollowing = Follows::where('follower_id', $follower)
                                 ->where('followed_id', $id_user)
                                 ->exists();
@@ -127,7 +117,7 @@ class PostController extends Controller
                 'followed_id' => $id_user,
             ]);
 
-            // Trigger the event
+            
             $followedUser = User::find($id_user);
 
             event(new UserFollowed($follower, $followedUser));
@@ -136,6 +126,45 @@ class PostController extends Controller
         } else {
             return redirect()->back()->with('info', 'You are already following this user.');
         }
+    }
+
+    public function notification()
+    {
+        $user_id = Auth::id();
+        $notifications = Notification::where('user_id', $user_id)->get();
+
+        return view('Notifikasi', [
+            'title' => 'Your Notifications',
+            'notifications' => $notifications,
+        ]);
+    }
+
+    public function following()
+    {
+        $currentUserId = Auth::id();
+    
+      
+        $followedUserIds = Follows::where('followed_id', $currentUserId)->pluck('followed_id');
+    
+      
+        $posts = Post::whereIn('user_id', $followedUserIds)->latest()->get();
+
+        $currentUserId = Auth::id();
+        $followedUserIds = Follows::where('follower_id', $currentUserId)->pluck('followed_id')->toArray();
+        $users = User::whereNotIn('id', $followedUserIds)
+                     ->where('id', '!=', $currentUserId)
+                     ->take(3)
+                     ->get();
+
+        return view('home2', [
+            'title' => 'Your Followed Users Posts',
+            'posts' => $posts,
+            'recommend' => $users
+        ]);
+    }
+
+    public function aploud_profile(Request $request){
+        dd($request);
     }
 
 }

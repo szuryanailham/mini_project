@@ -35,13 +35,26 @@
         </button>
     </form>
         {{-- ======================== RESULT SEARCH ============================= --}}
-        <div class="w-full border flex justify-between border-white h-fit p-2 mb-5">
-            {{-- image --}}
-           <div class="flex flec-col gap-4 item-center">
-            <p class="mt-2 text-sm">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deserunt nostrum tempora vitae?</p>
-           </div>
-           <p class="p-2 font-bold text-red-600">Hapus</p>
-        </div>
+        <ul>
+          @foreach($notifications as $notification)
+             
+                 
+                 @if($notification->type == 'follow')
+                 <li class="w-full p-3 border border-1 border-white rounded-md">
+                  <div class="flex flec-col gap-4 justify-between">
+                <p class="mt-2 text-sm"> {{ json_decode($notification->data)->follower_name }} followed you.</p>
+                    <p class="p-2 font-bold text-red-600">Hapus</p>
+                    </div>
+                  </li>
+                 
+                   
+                  @endif
+             
+          @endforeach
+      </ul>
+        {{-- <div class="w-full border flex justify-between border-white h-fit p-2 mb-5">
+          
+        </div> --}}
           {{-- ======================== END SEARCH ============================= --}}
       </div>
       

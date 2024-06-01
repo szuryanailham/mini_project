@@ -21,57 +21,54 @@
     <div class="flex flex-row">
       <div class="overscroll-contain h-fit w-1/2 max-h-screen overflow-y-auto p-7">
     {{-- SAMPLE CARD--}}
+    @foreach ($posts as $item)
+    {{-- SAMPLE CARD--}}
+{{-- @dd($item->user->name); --}}
+<div class="w-full h-fit rounded-md bg-transparent border-2 border-white p-5 mb-5 ">
+<div class="flex flex-row justify-between">
+  {{-- profile --}}
+  <div class="flex flex-row items-center gap-5 mb-5">
+   <img class="w-10  h-10 rounded-full p-5" src="https://github.com/shadcn.png" alt="Profile">
+   <div>
+     <p class="text-white font-semibold">{{ $item->user->name }}</p>
+     <span class="text-white text-xs italic">{{ $item->created_at->diffForHumans() }}</span>
+     <p class="mt-2">{{ $item->deskripsi }}</p>
+   </div>
+   
+ </div>
+ {{-- bookmard icon --}}
+ <a href="/add-bookmark/{{ $item->kode_post }}">
+  <i class="bi bi-bookmark-fill text-xl text-white"></i>
+ </a>
 
-         {{-- profile --}}
-     @foreach ($posts as $item)
-          {{-- SAMPLE CARD--}}
-      {{-- @dd($item->user->name); --}}
-     <div class="w-full h-fit rounded-md bg-transparent border-2 border-white p-5 mb-5 ">
-      <div class="flex flex-row justify-between">
-        {{-- profile --}}
-        <div class="flex flex-row items-center gap-5 mb-5">
-         <img class="w-10  h-10 rounded-full p-5" src="https://github.com/shadcn.png" alt="Profile">
-         <div>
-           <p class="text-white font-semibold">{{ $item->user->name }}</p>
-           <span class="text-white text-xs italic">{{ $item->created_at->diffForHumans() }}</span>
-           <p class="mt-2">{{ $item->deskripsi }}</p>
-         </div>
-         
-       </div>
-       {{-- bookmard icon --}}
-       <a href="/add-bookmark/{{ $item->kode_post }}">
-        <i class="bi bi-bookmark-fill text-xl text-white"></i>
-       </a>
-
-      </div>
-      {{-- Image post --}}
-      @if ($item->image)
-      <img class="img-fluid" style="width:700px;max-height:350px;overflow:hidden" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->judul }}">
-      @else
-      <img class="w-full h-[450px] rounded-lg object-cover p-5" src="/img/sample.jpg" alt="Image Post">
-      @endif
-      <hr class="border-t-2 border-gray-300 my-4">
-      <div class="w-[250px] h-fit flex flex-row justify-between p-2">
-           <div class="text-xl flex justify-between gap-2">
-          
-            <a href="/post/like/{{ $item->kode_post }}">
-              <i class="bi bi-heart"></i>
-            </a>
-             <p class="text-xs">{{ $item->likes_count }}</p>
-           </div>
-
-           <div class="text-xl ">
-            <a class="flex justify-around gap-1" href="/detail-post/{{ $item->kode_post  }}">
-              <i class="bi bi-chat-left"></i>
-              <p class="text-xs">comment</p>
-            </a>
-            
-           </div>
-      </div>
-     </div>
-   {{-- SAMPLE CARD END --}}
-     @endforeach
+</div>
+{{-- Image post --}}
+@if ($item->image)
+<img class="img-fluid" style="width:700px;max-height:350px;overflow:hidden" src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->judul }}">
+@else
+<img class="w-full h-[450px] rounded-lg object-cover p-5" src="/img/sample.jpg" alt="Image Post">
+@endif
+<hr class="border-t-2 border-gray-300 my-4">
+<div class="w-[250px] h-fit flex flex-row justify-between p-2">
+     <div class="text-xl flex justify-between gap-2">
     
+      <a href="/post/like/{{ $item->kode_post }}">
+        <i class="bi bi-heart"></i>
+      </a>
+       <p class="text-xs">{{ $item->likes_count }}</p>
+     </div>
+
+     <div class="text-xl ">
+      <a class="flex justify-around gap-1" href="/detail-post/{{ $item->kode_post  }}">
+        <i class="bi bi-chat-left"></i>
+        <p class="text-xs">comment</p>
+      </a>
+      
+     </div>
+</div>
+</div>
+{{-- SAMPLE CARD END --}}
+@endforeach
       </div>
     
       {{-- ===========RECOMENDASI ================ --}}
