@@ -68,4 +68,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Subcomment::class);
     }
+
+    public function image_profile(){
+        return $this->belongsTo( image_profile::class);
+    }
 }

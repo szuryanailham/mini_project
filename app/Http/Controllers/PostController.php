@@ -6,6 +6,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Notification;
 use App\Models\User;
 use App\Models\Bookmark;
+use App\Models\image_profile;
 use App\Models\Subcomment;
 use App\Models\Comment;
 use App\Models\Follows;
@@ -15,6 +16,7 @@ use App\Models\Post;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 
 class PostController extends Controller
@@ -163,8 +165,27 @@ class PostController extends Controller
         ]);
     }
 
-    public function aploud_profile(Request $request){
-        dd($request);
-    }
+    public function upload_profile(Request $request)
+    {
+        $validatedData = $request->validate([
+            'image' => 'required|image|max:2048',
+        ]);
 
+        // Store the image in the 'profile' directory within the 'public' disk
+        $imagePath = $request->file('image')->store('profile', 'public');
+
+        // Add the authenticated user's ID to the validated data
+        $validatedData['user_id'] = Auth::id();
+        $validatedData['image_name'] = $imagePath;
+
+        // Create the image profile record
+        image_profile::create($validatedData);
+
+    
+        $profile = image_profile::where('user_id', Auth::id())->get();
+
+     return view('profile.edit',[
+        'profile' => $profile
+     ]);
+    }
 }

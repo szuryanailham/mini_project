@@ -55,7 +55,7 @@ Route::post('/followUp/{id}', [PostController::class, 'followUp'])->name('follow
 
     Route::get('/detail-post/{kode_post}', [PostController::class, 'detail_post']);
 
-    Route::post('/upload-profile', [PostController::class, 'aploud_profile']);
+    Route::post('/upload-profile', [PostController::class, 'upload_profile']);
 
     Route::resource('/posts', PostEditController::class);
 
